@@ -27,7 +27,15 @@ function checksExistsUserAccount(request, response, next) {
 }
 
 function checksCreateTodosUserAvailability(request, response, next) {
-  // Complete aqui
+  const { user } = request;
+ 
+  const { pro, todos } = user;
+
+  if(!pro && todos.length === 10){
+    return response.status(403).json({warning: `Plan free have only 10 todo available`});
+  }
+
+  next();
 }
 
 function checksTodoExists(request, response, next) {
