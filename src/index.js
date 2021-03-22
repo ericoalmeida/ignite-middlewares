@@ -74,7 +74,26 @@ function checksTodoExists(request, response, next) {
 }
 
 function findUserById(request, response, next) {
-  // Complete aqui
+  const { params } = request;
+  const { id } = params;
+
+  const idIsUuid = validate(id);
+
+  if(!idIsUuid){
+    return response.status(403).json({error: 'Id must be a UUID valid'});
+  }
+
+  const userExists = users.some((user) => user.id === id);
+
+  if(!userExists){
+    return response.status(404).json({error: 'User not found!'});
+  }
+
+  const user = users.find((user) => user.id === id);
+
+  request.user = user; 
+  
+  next();
 }
 
 app.post('/users', (request, response) => {
